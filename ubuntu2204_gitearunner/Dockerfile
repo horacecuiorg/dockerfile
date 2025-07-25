@@ -17,6 +17,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -L https://github.com/getsops/sops/releases/download/v3.10.2/sops-v3.10.2.linux.${TARGETARCH} -o sops \
     && chmod +x sops && mv sops /usr/local/bin/
 
+    # 安装常用的 Python 库
+# --no-cache-dir 选项用于减少 Docker 镜像的大小
+RUN pip3 install --no-cache-dir \
+    requests \
+    PyYAML \
+    beautifulsoup4 \
+    lxml \
+    pandas \
+    numpy
+    
 # --- 直接创建 ubuntu 用户 (UID 1000) ---
 RUN groupadd -g 1000 ubuntu && \
     useradd -u 1000 -g 1000 -m -s /bin/bash ubuntu && \
