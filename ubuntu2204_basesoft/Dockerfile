@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl wget gnupg lsb-release \
     git unzip zip tar vim nano htop iproute2 iputils-ping net-tools \
     xz-utils openssh-client openssh-server\
-    sudo bash tmux\
+    sudo bash tmux netcat-openbsd socat\
     build-essential software-properties-common \
     python3 python3-pip python3-venv && mkdir -p /var/run/sshd && \
     apt-get clean && \
@@ -47,4 +47,4 @@ RUN case "$TARGETARCH" in \
 
 # 默认进入 shell
 CMD ["/bin/bash"]
-
+# cyhfch/ubuntu2204:basesoft
