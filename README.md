@@ -2,9 +2,9 @@
 
 
 
-cyhfch/ubuntu2204:basesoft
-cyhfch/ubuntu2204
-cyhfch/ubuntu2204:dockernode
-cyhfch/ubuntu2204:gitearunner
-cyhfch/ubuntu2204:githubrunner
-cyhfch/ubuntu2204:oracleshell
+docker pull cyhfch/ubuntu2204:basesoft
+docker pull cyhfch/ubuntu2204
+docker pull cyhfch/ubuntu2204:dockernode
+docker pull cyhfch/ubuntu2204:gitearunner
+docker pull cyhfch/ubuntu2204:githubrunner
+docker pull cyhfch/ubuntu2204:oracleshell
