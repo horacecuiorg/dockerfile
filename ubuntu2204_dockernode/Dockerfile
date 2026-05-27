@@ -1,5 +1,5 @@
 FROM ghcr.io/horacecuiorg/dockerfile/ubuntu2204:basesoft
-
+# update cyhfch/ubuntu2204:basesoft
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 复制 entrypoint 脚本以及构建上下文中的所有文件到镜像的根目录
