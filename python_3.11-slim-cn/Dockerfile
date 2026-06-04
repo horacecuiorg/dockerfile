@@ -1,6 +1,6 @@
 # 使用官方 Python 3.11 slim 镜像
 FROM python:3.11-slim
-LABEL version="20260604-v1.0.1"
+LABEL version="20260604-v1.0.2"
 
 # 设置非交互式模式，避免 tzdata 等软件包安装时阻塞
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,8 +23,8 @@ deb http://mirrors.aliyun.com/debian-security bookworm-security main contrib non
 EOF
 
 # 配置 pip 使用阿里云镜像源
-RUN python -m pip install --upgrade pip && \
-    pip install --upgrade flask requests python-dotenv httpx fastapi uvicorn aiosqlite python-multipart gunicorn aiohttp debugpy dingtalk-stream && \
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --upgrade flask requests python-dotenv httpx fastapi uvicorn aiosqlite python-multipart gunicorn aiohttp debugpy dingtalk-stream && \
     mkdir -p /root/.pip && \
     cat <<EOF > /root/.pip/pip.conf
 [global]

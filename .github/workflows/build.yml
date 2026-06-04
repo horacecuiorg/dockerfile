@@ -66,6 +66,8 @@ jobs:
             fi
           done
 
+          echo "🔍 Changed directories: $CHANGED_DIRS"
+          echo "🚀 Services to build:$SERVICES"
           echo "services=$SERVICES" >> "$GITHUB_OUTPUT"
 
       - name: Build and push each service
@@ -79,8 +81,14 @@ jobs:
             if ! bash public_scripts/build_one_Dockerfile.sh "$dir"; then
               echo "❌ Failed to build $dir"
               failed_services+=("$dir")
+            else
+              echo "✅ Successfully built and pushed $dir"
             fi
           done
+
+          echo "--- 推送镜像列表 (Pushed Images Summary) ---"
+          cat images.txt || echo "无镜像推送 (No images pushed)"
+          echo "--------------------"
 
           if [ ${#failed_services[@]} -ne 0 ]; then
             echo "❌ The following services failed: ${failed_services[*]}"
