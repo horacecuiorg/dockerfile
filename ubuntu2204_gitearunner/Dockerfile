@@ -1,5 +1,5 @@
 FROM gitea/runner-images:ubuntu-22.04
-LABEL version="20260604-v1.0.3"
+LABEL version="20260604-v1.0.4"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
