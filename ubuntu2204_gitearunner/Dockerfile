@@ -1,5 +1,5 @@
 FROM gitea/runner-images:ubuntu-22.04
-
+LABEL version="20260604-v1.0.0"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -27,9 +27,9 @@ RUN pip3 install --no-cache-dir \
     pandas \
     numpy
     
-# --- 直接创建 ubuntu 用户 (UID 1000) ---
-RUN groupadd -g 1000 ubuntu && \
-    useradd -u 1000 -g 1000 -m -s /bin/bash ubuntu && \
+# --- 安全创建/检查 ubuntu 用户 ---
+RUN getent group ubuntu >/dev/null || groupadd -g 1000 ubuntu && \
+    getent passwd ubuntu >/dev/null || useradd -u 1000 -g 1000 -m -s /bin/bash ubuntu && \
     echo "ubuntu:ubuntu" | chpasswd && \
     adduser ubuntu sudo && \
     # 如果 docker 组存在，将 ubuntu 用户加入 docker 组

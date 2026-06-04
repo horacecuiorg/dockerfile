@@ -65,8 +65,10 @@ def main():
     if not repositories:
         print(f"No repositories found for namespace {namespace}.")
         # 也确保 JSON 输出是空的或表示无数据
-        with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-            print(f'docker_hub_results_json=[]', file=fh)
+        github_output = os.environ.get('GITHUB_OUTPUT')
+        if github_output:
+            with open(github_output, 'a') as fh:
+                print('docker_hub_results_json=[]', file=fh)
         return
 
     print(f"Found {len(repositories)} repositories.")
@@ -187,8 +189,11 @@ def main():
     with open(output_json_path, 'w') as f:
         json.dump(json_output_data, f, indent=2)
     
-    print(f"::set-output name=docker_hub_results_path::{output_json_path}")
-    print(f"::set-output name=docker_hub_results_json_string::{json.dumps(json_output_data)}") # 仅用于小量数据，有大小限制
+    github_output = os.environ.get('GITHUB_OUTPUT')
+    if github_output:
+        with open(github_output, 'a') as fh:
+            print(f'docker_hub_results_path={output_json_path}', file=fh)
+            print(f'docker_hub_results_json_string={json.dumps(json_output_data)}', file=fh)
 
 if __name__ == "__main__":
     main()

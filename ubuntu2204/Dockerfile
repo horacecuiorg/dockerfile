@@ -9,27 +9,7 @@ ARG TARGETARCH  # amd64 and  arm64
 
 
 
-# cloudflared
-RUN case "$TARGETARCH" in \
-      amd64) ARCH="amd64" ;; \
-      arm64) ARCH="arm64" ;; \
-      *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
-    esac && \
-    curl -fsSL -o /usr/local/bin/cloudflared \
-      "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${ARCH}" && \
-    chmod +x /usr/local/bin/cloudflared && \
-    cloudflared --version
-
-# node
-#RUN ARCH=$TARGETARCH && \
-#    case "$ARCH" in \
-#      amd64) ARCH_NAME="x64" ;; \
-#      arm64) ARCH_NAME="arm64" ;; \
-#      *) echo "Unsupported arch: $ARCH" && exit 1 ;; \
-#    esac && \
-#    curl -fsSL https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${ARCH_NAME}.tar.xz \
-#    | tar -xJ -C /usr/local --strip-components=1 && \
-#    node -v && npm -v
+# Note: cloudflared and Node.js are already installed in ubuntu2204:basesoft
 
 
 

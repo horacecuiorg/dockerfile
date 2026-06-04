@@ -1,5 +1,6 @@
 # 使用官方 Python 3.11 slim 镜像
 FROM python:3.11-slim
+LABEL version="20260604-v1.0.0"
 
 # 设置非交互式模式，避免 tzdata 等软件包安装时阻塞
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,16 +16,21 @@ RUN apt-get update && \
         ca-certificates iputils-ping iproute2 dnsutils \
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/apt/sources.list.d/* && \
-    echo "deb http://mirrors.aliyun.com/debian bookworm main contrib non-free\n\
-          deb http://mirrors.aliyun.com/debian bookworm-updates main contrib non-free\n\
-          deb http://mirrors.aliyun.com/debian-security bookworm-security main contrib non-free" \
-    > /etc/apt/sources.list
+    cat <<EOF > /etc/apt/sources.list
+deb http://mirrors.aliyun.com/debian bookworm main contrib non-free
+deb http://mirrors.aliyun.com/debian bookworm-updates main contrib non-free
+deb http://mirrors.aliyun.com/debian-security bookworm-security main contrib non-free
+EOF
 
 # 配置 pip 使用阿里云镜像源
 RUN python -m pip install --upgrade pip && \
     pip install --upgrade flask requests python-dotenv httpx fastapi uvicorn aiosqlite python-multipart gunicorn aiohttp debugpy dingtalk-stream && \
     mkdir -p /root/.pip && \
-    echo "[global]\nindex-url = https://mirrors.aliyun.com/pypi/simple/\ntrusted-host = mirrors.aliyun.com" > /root/.pip/pip.conf
+    cat <<EOF > /root/.pip/pip.conf
+[global]
+index-url = https://mirrors.aliyun.com/pypi/simple/
+trusted-host = mirrors.aliyun.com
+EOF
 
 COPY ./app /app
 

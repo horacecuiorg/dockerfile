@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 LABEL org.opencontainers.image.source https://github.com/horacecuiorg/dockerfile
+LABEL version="20260604-v1.0.0"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 

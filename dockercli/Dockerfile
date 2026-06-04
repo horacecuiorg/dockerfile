@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-
+LABEL version="20260604-v1.0.0"
 # 安装基础工具、sudo、Docker CLI 和 Compose
 RUN apt-get update && apt-get install -y \
     curl \
