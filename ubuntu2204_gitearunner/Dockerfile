@@ -1,14 +1,15 @@
 FROM gitea/runner-images:ubuntu-22.04
-LABEL version="20260604-v1.0.2"
+LABEL version="20260604-v1.0.3"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
 # 安装必要软件
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN rm -f /etc/apt/sources.list.d/*git-lfs*.list || true && \
+    apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl wget gnupg lsb-release \
     git unzip zip tar vim nano htop iproute2 iputils-ping net-tools \
     xz-utils openssh-client \
-    sudo bash tmux netcat-openbsd socat\
+    sudo bash tmux netcat-openbsd socat \
     build-essential software-properties-common \
     python3 python3-pip python3-venv && mkdir -p /var/run/sshd && \
     apt-get clean && \
