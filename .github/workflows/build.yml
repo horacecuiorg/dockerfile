@@ -68,6 +68,43 @@ jobs:
 
           echo "🔍 Changed directories: $CHANGED_DIRS"
           echo "🚀 Services to build:$SERVICES"
+
+          if [ -n "$SERVICES" ]; then
+            echo "--- Service Details with Tags & Version Labels ---"
+            echo "### 🚀 Services to Build" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Service Directory | Target Image (Tag) | Version Label | Dockerfile |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| --- | --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+
+            for dir in $SERVICES; do
+              for df in "$dir"/Dockerfile*; do
+                [ -f "$df" ] || continue
+                filename=$(basename "$df")
+                dirname=$(basename "$dir")
+
+                # Parse Target Tag
+                if [[ "$filename" == "Dockerfile" ]]; then
+                  if [[ "$dirname" == *_* ]]; then
+                    tag="${dirname#*_}"
+                    svc_name="${dirname%%_*}"
+                  else
+                    tag="latest"
+                    svc_name="$dirname"
+                  fi
+                else
+                  tag="${filename#Dockerfile_}"
+                  svc_name="$dirname"
+                fi
+
+                # Extract LABEL version from Dockerfile
+                version=$(python3 -c "import re; m=re.search(r'(?i)LABEL\s+version\s*=\s*[\"\']([^\"\']+)[\"\']', open('$df').read()); print(m.group(1) if m else 'N/A')")
+
+                echo "  🏷️  $dir => $svc_name:$tag | Version: $version ($df)"
+                echo "| \`$dir\` | \`$svc_name:$tag\` | \`$version\` | \`$df\` |" >> "$GITHUB_STEP_SUMMARY"
+              done
+            done
+            echo "--------------------------------------------------"
+          fi
+
           echo "services=$SERVICES" >> "$GITHUB_OUTPUT"
 
       - name: Build and push each service
