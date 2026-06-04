@@ -1,5 +1,6 @@
 FROM ghcr.io/horacecuiorg/dockerfile/ubuntu2204:basesoft
 # update cyhfch/ubuntu2204:basesoft
+LABEL version="20260604-v1.0.0"
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 复制 entrypoint 脚本以及构建上下文中的所有文件到镜像的根目录

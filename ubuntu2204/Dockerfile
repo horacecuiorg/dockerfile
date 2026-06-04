@@ -1,6 +1,7 @@
 FROM ghcr.io/horacecuiorg/dockerfile/ubuntu2204:basesoft
 # update cyhfch/ubuntu2204:basesoft
 LABEL org.opencontainers.image.source https://github.com/horacecuiorg/dockerfile
+LABEL version="20260604-v1.0.0"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ARG NODE_VERSION=20.11.1

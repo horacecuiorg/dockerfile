@@ -1,4 +1,5 @@
 FROM cyhfch/userssh
+LABEL version="20260604-v1.0.0"
 
 
 ARG USERNAME=user
