@@ -1,6 +1,6 @@
 # 使用官方 Python 3.11 slim 镜像
 FROM python:3.11-slim
-LABEL version="20260604-v1.0.0"
+LABEL version="20260604-v1.0.1"
 
 # 设置非交互式模式，避免 tzdata 等软件包安装时阻塞
 ENV DEBIAN_FRONTEND=noninteractive
@@ -12,7 +12,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
         curl wget traceroute telnet tcpdump \
-        git netcat nmap \
+        git netcat-openbsd nmap \
         ca-certificates iputils-ping iproute2 dnsutils \
     && apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/apt/sources.list.d/* && \

@@ -72,10 +72,19 @@ jobs:
         run: |
           IFS=' ' read -r -a services_array <<< "${{ steps.changes.outputs.services }}"
           rm -f images.txt
+          failed_services=()
           for dir in "${services_array[@]}"; do
             echo "👉 Building $dir"
-            bash public_scripts/build_one_Dockerfile.sh "$dir"
+            if ! bash public_scripts/build_one_Dockerfile.sh "$dir"; then
+              echo "❌ Failed to build $dir"
+              failed_services+=("$dir")
+            fi
           done
+
+          if [ ${#failed_services[@]} -ne 0 ]; then
+            echo "❌ The following services failed: ${failed_services[*]}"
+            exit 1
+          fi
         env:
           DOCKER_NAMESPACE: ${{ env.DOCKER_NAMESPACE }}
           GHCR_ORG_NAMESPACE: ${{ env.GHCR_ORG_NAMESPACE }}

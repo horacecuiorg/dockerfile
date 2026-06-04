@@ -1,5 +1,5 @@
 FROM node:23.11.1-alpine
-LABEL version="20260604-v1.0.0"
+LABEL version="20260604-v1.0.1"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/usr/local/bin:$PATH
