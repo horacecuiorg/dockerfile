@@ -3,6 +3,17 @@ name: Safe Package Cleanup
 on:
   workflow_dispatch:
     inputs:
+      packages:
+        description: '需要清理的 package 名称（支持换行输入多个）'
+        required: true
+        type: string
+        default: |
+          dockerfile/ubuntu2204
+          dockerfile/dockercli
+          dockerfile/python
+          dockerfile/userssh
+          dockerfile/alpine319
+          dockerfile/hello-world
       dry_run:
         description: '是否仅预览/模拟删除（建议先勾选测试）'
         required: true
@@ -12,7 +23,7 @@ on:
         description: '每个镜像保留最近多少个带标签的版本'
         required: true
         type: string
-        default: '3'
+        default: '20'
 
 jobs:
   cleanup:
@@ -24,6 +35,7 @@ jobs:
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
           token: ${{ secrets.GHCR_PAT }}
+          packages: ${{ github.event.inputs.packages }}
           dry-run: ${{ github.event.inputs.dry_run }}
           keep-n-tagged: ${{ github.event.inputs.keep_n }}
           delete-untagged: true  # 自动清理失去 Tag 关联的孤儿 sha256 分片
