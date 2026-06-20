@@ -1,5 +1,5 @@
 FROM gitea/runner-images:ubuntu-22.04
-LABEL version="20260620-v1.0.5"
+LABEL version="20260620-v1.0.6"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -7,7 +7,7 @@ ARG TARGETARCH  # amd64 and  arm64
 RUN rm -f /etc/apt/sources.list.d/*git-lfs*.list || true && \
     apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates curl wget gnupg lsb-release \
-    git unzip zip tar vim nano htop iproute2 iputils-ping net-tools \
+    git unzip zip tar vim nano htop iproute2 iputils-ping net-tools dnsutils \
     xz-utils openssh-client \
     sudo bash tmux netcat-openbsd socat \
     build-essential software-properties-common \
