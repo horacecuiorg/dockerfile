@@ -4,16 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       packages:
-        description: '需要清理的 package 名称（支持换行输入多个，留空则默认清理全部镜像）'
+        description: '需要清理的 package 名称（多个请用英文逗号 , 分隔）'
         required: false
         type: string
-        default: |
-          dockerfile/ubuntu2204
-          dockerfile/dockercli
-          dockerfile/python
-          dockerfile/userssh
-          dockerfile/alpine319
-          dockerfile/hello-world
+        default: 'dockerfile/ubuntu2204,dockerfile/dockercli,dockerfile/python,dockerfile/userssh,dockerfile/alpine319,dockerfile/hello-world'
       dry_run:
         description: '是否仅预览/模拟删除（建议先勾选测试）'
         required: true
@@ -38,4 +32,4 @@ jobs:
           packages: ${{ github.event.inputs.packages || 'dockerfile/ubuntu2204,dockerfile/dockercli,dockerfile/python,dockerfile/userssh,dockerfile/alpine319,dockerfile/hello-world' }}
           dry-run: ${{ github.event.inputs.dry_run }}
           keep-n-tagged: ${{ github.event.inputs.keep_n }}
-          delete-untagged: true  # 自动清理失去 Tag 关联的孤儿 sha256 分片
+          delete-untagged: true  # 自动清理失去 Tag 关联 of 孤儿 sha256 分片
