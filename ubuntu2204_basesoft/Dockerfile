@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 LABEL org.opencontainers.image.source https://github.com/horacecuiorg/dockerfile
-LABEL version="20260604-v1.0.2"
+LABEL version="20260620-v1.0.3"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -12,7 +12,8 @@ RUN apt-get update && apt-get upgrade -y && \
         xz-utils openssh-client openssh-server \
         sudo bash tmux netcat-openbsd socat \
         build-essential software-properties-common \
-        python3 python3-pip python3-venv && \
+        python3 python3-pip python3-venv \
+        libicu-dev && \
     # 1. 配置 Docker CLI 源
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
@@ -33,11 +34,20 @@ RUN apt-get update && apt-get upgrade -y && \
     curl -fsSL -o /usr/local/bin/cloudflared "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${ARCH}" && \
     chmod +x /usr/local/bin/cloudflared && \
     cloudflared --version && \
-    # 6. 系统收尾清理工作
+    # 6. 安装 .NET 10 SDK
+    curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
+    chmod +x dotnet-install.sh && \
+    ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet && \
+    rm dotnet-install.sh && \
+    # 7. 系统收尾清理工作
     mkdir -p /var/run/sshd && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.npm
 
+
+# 配置 .NET 环境变量
+ENV DOTNET_ROOT=/usr/share/dotnet
+ENV PATH="/usr/share/dotnet:${PATH}"
 
 # 默认进入 shell
 CMD ["/bin/bash"]
