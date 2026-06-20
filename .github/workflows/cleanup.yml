@@ -1,0 +1,29 @@
+name: Safe Package Cleanup
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '是否仅预览/模拟删除（建议先勾选测试）'
+        required: true
+        type: boolean
+        default: true
+      keep_n:
+        description: '每个镜像保留最近多少个带标签的版本'
+        required: true
+        type: string
+        default: '3'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Safe Cleanup GHCR Images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          token: ${{ secrets.GHCR_PAT }}
+          dry-run: ${{ github.event.inputs.dry_run }}
+          keep-n-tagged: ${{ github.event.inputs.keep_n }}
+          delete-untagged: true  # 自动清理失去 Tag 关联的孤儿 sha256 分片
