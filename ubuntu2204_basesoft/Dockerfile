@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 LABEL org.opencontainers.image.source https://github.com/horacecuiorg/dockerfile
-LABEL version="20260620-v1.0.3"
+LABEL version="20260620-v1.0.4"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -8,7 +8,7 @@ ARG TARGETARCH  # amd64 and  arm64
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         ca-certificates curl wget gnupg lsb-release \
-        git unzip zip tar vim nano htop iproute2 iputils-ping net-tools \
+        git unzip zip tar vim nano htop iproute2 iputils-ping net-tools dnsutils \
         xz-utils openssh-client openssh-server \
         sudo bash tmux netcat-openbsd socat \
         build-essential software-properties-common \
