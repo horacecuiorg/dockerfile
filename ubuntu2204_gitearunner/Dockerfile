@@ -1,5 +1,5 @@
 FROM gitea/runner-images:ubuntu-22.04
-LABEL version="20260604-v1.0.4"
+LABEL version="20260620-v1.0.5"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -11,7 +11,13 @@ RUN rm -f /etc/apt/sources.list.d/*git-lfs*.list || true && \
     xz-utils openssh-client \
     sudo bash tmux netcat-openbsd socat \
     build-essential software-properties-common \
-    python3 python3-pip python3-venv && mkdir -p /var/run/sshd && \
+    python3 python3-pip python3-venv \
+    libicu-dev && mkdir -p /var/run/sshd && \
+    # 安装 .NET 10 SDK
+    curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
+    chmod +x dotnet-install.sh && \
+    ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet && \
+    rm dotnet-install.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -42,6 +48,10 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
 
 # 设置工作目录为用户主目录
 #WORKDIR /home/ubuntu
+
+# 配置 .NET 环境变量
+ENV DOTNET_ROOT=/usr/share/dotnet
+ENV PATH="/usr/share/dotnet:${PATH}"
 
 # 设置 ubuntu 用户为默认用户
 USER ubuntu
