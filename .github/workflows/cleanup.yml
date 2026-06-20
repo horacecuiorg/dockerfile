@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       packages:
-        description: '需要清理的 package 名称（支持换行输入多个）'
-        required: true
+        description: '需要清理的 package 名称（支持换行输入多个，留空则默认清理全部镜像）'
+        required: false
         type: string
         default: |
           dockerfile/ubuntu2204
@@ -35,7 +35,7 @@ jobs:
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
           token: ${{ secrets.GHCR_PAT }}
-          packages: ${{ github.event.inputs.packages }}
+          packages: ${{ github.event.inputs.packages || 'dockerfile/ubuntu2204,dockerfile/dockercli,dockerfile/python,dockerfile/userssh,dockerfile/alpine319,dockerfile/hello-world' }}
           dry-run: ${{ github.event.inputs.dry_run }}
           keep-n-tagged: ${{ github.event.inputs.keep_n }}
           delete-untagged: true  # 自动清理失去 Tag 关联的孤儿 sha256 分片
