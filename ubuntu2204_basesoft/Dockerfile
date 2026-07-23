@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 LABEL org.opencontainers.image.source https://github.com/horacecuiorg/dockerfile
-LABEL version="20260620-v1.0.4"
+LABEL version="20260724-v1.0.5"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -18,14 +18,17 @@ RUN apt-get update && apt-get upgrade -y && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list && \
-    # 2. 配置 Node.js LTS 源
+    # 2. 配置 HashiCorp Vault CLI 源
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /etc/apt/keyrings/hashicorp.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list && \
+    # 3. 配置 Node.js LTS 源
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
-    # 3. 安装依赖包
+    # 4. 安装依赖包
     apt-get update && \
-    apt-get install -y --no-install-recommends docker-ce-cli nodejs && \
-    # 4. 升级 npm 并清理缓存
+    apt-get install -y --no-install-recommends docker-ce-cli nodejs vault && \
+    # 5. 升级 npm 并清理缓存
     npm install -g npm && \
-    # 5. 下载并解压 cloudflared 客户端
+    # 6. 下载并解压 cloudflared 客户端
     case "$TARGETARCH" in \
       amd64) ARCH="amd64" ;; \
       arm64) ARCH="arm64" ;; \
@@ -34,12 +37,12 @@ RUN apt-get update && apt-get upgrade -y && \
     curl -fsSL -o /usr/local/bin/cloudflared "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-${ARCH}" && \
     chmod +x /usr/local/bin/cloudflared && \
     cloudflared --version && \
-    # 6. 安装 .NET 10 SDK
+    # 7. 安装 .NET 10 SDK
     curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
     chmod +x dotnet-install.sh && \
     ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet && \
     rm dotnet-install.sh && \
-    # 7. 系统收尾清理工作
+    # 8. 系统收尾清理工作
     mkdir -p /var/run/sshd && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /root/.npm

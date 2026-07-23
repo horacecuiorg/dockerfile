@@ -13,10 +13,10 @@
 
 | 目录/服务路径 | 目标镜像 Tag | 基础镜像 (Base Image) | 核心说明与预装软件 |
 | :--- | :--- | :--- | :--- |
-| [ubuntu2204_basesoft](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_basesoft) | `basesoft` | `ubuntu:22.04` | **核心底座镜像**：预装 Git, Python3, Node.js LTS, docker-cli, cloudflared, tmux, netcat-openbsd, socat 等，作为其它 Ubuntu 镜像的基础。 |
+| [ubuntu2204_basesoft](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_basesoft) | `basesoft` | `ubuntu:22.04` | **核心底座镜像**：预装 Git, Python3, Node.js LTS, docker-cli, Vault CLI, cloudflared, tmux, netcat-openbsd, socat 等，作为其它 Ubuntu 镜像的基础。 |
 | [ubuntu2204](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204) | `latest` | `cyhfch/ubuntu2204:basesoft` | 继承 basesoft，创建并配置了默认 of 默认的无密码免密 `runner` 用户 (UID 1001)。 |
 | [ubuntu2204_githubrunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_githubrunner) | `githubrunner` | `cyhfch/ubuntu2204:basesoft` | 继承 basesoft，专为自建 GitHub Actions Runner 配置的特需用户组环境 (GID 118, 4, 100, 999)。 |
-| [ubuntu2204_gitearunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_gitearunner) | `gitearunner` | `gitea/runner-images:ubuntu-22.04` | 专为 Gitea Runner 设计，内置 SOPS 解密工具与科学计算 Python 包（pandas, numpy），默认用户为 `ubuntu`。 |
+| [ubuntu2204_gitearunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_gitearunner) | `gitearunner` | `gitea/runner-images:ubuntu-22.04` | 专为 Gitea Runner 设计，内置 Vault CLI、SOPS 解密工具与科学计算 Python 包（pandas, numpy），默认用户为 `ubuntu`。 |
 | [ubuntu2204_oracleshell](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_oracleshell) | `oracleshell` | `cyhfch/ubuntu2204:basesoft` | 继承 basesoft，配置了前台运行的 OpenSSH 服务，默认注入 Cuiyinhu 的公钥并以其登录。 |
 | [ubuntu2204_dockernode](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_dockernode) | `dockernode` | `cyhfch/ubuntu2204:basesoft` | 继承 basesoft，内置可动态匹配宿主机 UID/GID 的容器入口脚本。 |
 | [dockercli](file:///home/ubuntu/githuborg/public/DockerFile/dockercli) | `latest` | `debian:bullseye-slim` | 轻量化 Docker 交互环境，内置 Docker-CLI 和 Compose，能动态对齐运行时宿主机 UID/GID 权限。 |
@@ -63,10 +63,10 @@ This repository is designed to manage, build, and publish a collection of custom
 
 | Directory / Service | Target Image Tag | Base Image | Core Description & Pre-installed Software |
 | :--- | :--- | :--- | :--- |
-| [ubuntu2204_basesoft](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_basesoft) | `basesoft` | `ubuntu:22.04` | **Core Base Image**: Pre-installed with Git, Python3, Node.js LTS, docker-cli, cloudflared, tmux, netcat-openbsd, socat, etc. Serves as the foundation for other Ubuntu-based images. |
+| [ubuntu2204_basesoft](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_basesoft) | `basesoft` | `ubuntu:22.04` | **Core Base Image**: Pre-installed with Git, Python3, Node.js LTS, docker-cli, Vault CLI, cloudflared, tmux, netcat-openbsd, socat, etc. Serves as the foundation for other Ubuntu-based images. |
 | [ubuntu2204](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204) | `latest` | `cyhfch/ubuntu2204:basesoft` | Inherits from basesoft, creates and configures a default passwordless sudo user `runner` (UID 1001). |
 | [ubuntu2204_githubrunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_githubrunner) | `githubrunner` | `cyhfch/ubuntu2204:basesoft` | Inherits from basesoft, configured with GIDs (118, 4, 100, 999) needed for self-hosted GitHub Actions runners. |
-| [ubuntu2204_gitearunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_gitearunner) | `gitearunner` | `gitea/runner-images:ubuntu-22.04` | Designed for Gitea Runners, pre-installed with SOPS decryption tool and scientific computing Python packages (pandas, numpy). Default user is `ubuntu`. |
+| [ubuntu2204_gitearunner](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_gitearunner) | `gitearunner` | `gitea/runner-images:ubuntu-22.04` | Designed for Gitea Runners, pre-installed with Vault CLI, SOPS decryption tool and scientific computing Python packages (pandas, numpy). Default user is `ubuntu`. |
 | [ubuntu2204_oracleshell](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_oracleshell) | `oracleshell` | `cyhfch/ubuntu2204:basesoft` | Inherits from basesoft, configures a foreground OpenSSH server and injects public key for user `cuiyinhu` (UID 1101). |
 | [ubuntu2204_dockernode](file:///home/ubuntu/githuborg/public/DockerFile/ubuntu2204_dockernode) | `dockernode` | `cyhfch/ubuntu2204:basesoft` | Inherits from basesoft, equipped with an entrypoint script to dynamically align container UID/GID with the host system. |
 | [dockercli](file:///home/ubuntu/githuborg/public/DockerFile/dockercli) | `latest` | `debian:bullseye-slim` | Lightweight Docker environment with Docker-CLI and Compose, dynamically aligning container UID/GID permissions with the host. |

@@ -1,5 +1,5 @@
 FROM gitea/runner-images:ubuntu-22.04
-LABEL version="20260620-v1.0.6"
+LABEL version="20260724-v1.0.7"
 ENV DEBIAN_FRONTEND=noninteractive
 ARG TARGETARCH  # amd64 and  arm64
 
@@ -13,6 +13,11 @@ RUN rm -f /etc/apt/sources.list.d/*git-lfs*.list || true && \
     build-essential software-properties-common \
     python3 python3-pip python3-venv \
     libicu-dev && mkdir -p /var/run/sshd && \
+    # 安装 HashiCorp Vault CLI
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /etc/apt/keyrings/hashicorp.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list && \
+    apt-get update && apt-get install -y --no-install-recommends vault && \
     # 安装 .NET 10 SDK
     curl -fsSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh && \
     chmod +x dotnet-install.sh && \
